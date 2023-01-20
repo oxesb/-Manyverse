@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 The Manyverse Authors
+// SPDX-FileCopyrightText: 2022-2023 The Manyverse Authors
 //
 // SPDX-License-Identifier: MPL-2.0
 
@@ -77,6 +77,8 @@ export default class ReadMoreOverlay extends PureComponent<Props> {
         fadeStartY === undefined ? maxHeight * 0.5 : maxHeight - fadeStartY,
       fill: fading ? `url(#grad${randomID})` : 'rgba(0,0,0,0)',
       strokeWidth: '0',
+      // TODO: We want to disable press events from the Markdown in this section. Works on web but not Android
+      pointerEvents: 'box-only',
       ['style' as any]: {
         ...Platform.select({
           web: {
@@ -86,7 +88,7 @@ export default class ReadMoreOverlay extends PureComponent<Props> {
       },
     });
 
-    return h(View, {style: styles.readMoreContainer}, [
+    return h(View, {style: styles.readMoreContainer, pointerEvents: 'none'}, [
       h(Svg, {width, height: '100%'}, [
         fading ? svgDefs : null,
         upperPartition,
@@ -102,7 +104,6 @@ export default class ReadMoreOverlay extends PureComponent<Props> {
       Touchable,
       {
         onPress,
-        pointerEvent: 'box-only',
         background:
           Platform.OS === 'android'
             ? TouchableNativeFeedback.SelectableBackground()
